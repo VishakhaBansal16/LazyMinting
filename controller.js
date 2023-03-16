@@ -1,8 +1,7 @@
 import { init } from "./mint.js";
 import { NFTVoucher } from "./model/NFTVoucher.js";
-import { ethers } from "ethers";
+import web3 from "web3";
 import { initMint } from "./script.js";
-import { Decimal128 } from "mongodb";
 
 export const createNFTVoucher = async (req, res, next) => {
   try {
@@ -14,17 +13,16 @@ export const createNFTVoucher = async (req, res, next) => {
         message: "All inputs are required",
       });
     }
-    const minPriceInWei = ethers.utils.parseEther(minPrice);
+    const minPriceInWei = web3.utils.toWei(minPrice.toString(), "ether");
     const Receipt = await init(tokenId, minPriceInWei, uri, buyer);
 
     if (!Receipt) {
       throw createError(404, "Not Found");
     }
-    const price = new Decimal128(minPriceInWei.toString());
 
     const nftVoucher = await NFTVoucher.create({
       tokenId,
-      minPrice: price,
+      minPrice: minPriceInWei,
       uri,
       buyer,
       signature: Receipt.signature,
@@ -51,14 +49,18 @@ export const mintNFT = async (req, res, next) => {
         message: "All inputs are required",
       });
     }
-    const minPriceInWei = ethers.utils.parseEther(minPrice);
-    const price = minPriceInWei.toString();
+    const minPriceInWei = web3.utils.toWei(minPrice.toString(), "ether");
+
     const signedVoucher = await NFTVoucher.findOne({ tokenId });
+
+    if (!signedVoucher) {
+      throw createError(404, "Not Found");
+    }
 
     if (
       !(
         tokenId == signedVoucher.tokenId &&
-        price == signedVoucher.minPrice &&
+        minPriceInWei == signedVoucher.minPrice &&
         uri == signedVoucher.uri &&
         buyer == signedVoucher.buyer
       )
