@@ -1,36 +1,31 @@
-import { init, createVoucher } from "./LazyMinting.js";
+import { init } from "./LazyMinting.js";
 import { NFTVoucher } from "./model/NFTVoucher.js";
 import { ethers } from "ethers";
 import { initMint } from "./script.js";
 import { Decimal128 } from "mongodb";
-//const provider = new ethers.providers.JsonRpcProvider(
-// "https://goerli.infura.io/v3/73278735c19b4cd7bc5ea172332ca2f9"
-//);
-//const contractAddress = "0x5cE8Bed7f508E3D36D312bf51221c6E185994C23";
-//const contractInstance = new ethers.Contract(contractAddress, ABI, provider);
 
 export const createNFTVoucher = async (req, res, next) => {
   try {
     //Get user input
-    const { tokenId, uri, minPrice, buyer } = req.body;
-    if (!(tokenId, uri, minPrice, buyer)) {
+    const { tokenId, minPrice, uri, buyer } = req.body;
+    if (!(tokenId, minPrice, uri, buyer)) {
       res.status(400).json({
         status: "failed",
         message: "All inputs are required",
       });
     }
     const minPriceInWei = ethers.utils.parseEther(minPrice);
-    const Receipt = await init(tokenId, uri, minPriceInWei, buyer);
-    //console.log(`Receipt is: , ${Receipt.signature}`);
+    const Receipt = await init(tokenId, minPriceInWei, uri, buyer);
 
     if (!Receipt) {
       throw createError(404, "Not Found");
     }
     const price = new Decimal128(minPriceInWei.toString());
+    //const price = new Decimal128(minPriceInWei);
     const nftVoucher = await NFTVoucher.create({
       tokenId,
-      uri,
       minPrice: price,
+      uri,
       buyer,
       signature: Receipt.signature,
     });
@@ -48,9 +43,9 @@ export const createNFTVoucher = async (req, res, next) => {
 export const mintNFT = async (req, res, next) => {
   try {
     //Get user input
-    const { tokenId, uri, minPrice, buyer, buyerPrivateKey } = req.body;
+    const { tokenId, minPrice, uri, buyer, buyerPrivateKey } = req.body;
 
-    if (!(tokenId, uri, minPrice, buyer, buyerPrivateKey)) {
+    if (!(tokenId, minPrice, uri, buyer, buyerPrivateKey)) {
       res.status(400).json({
         status: "failed",
         message: "All inputs are required",
@@ -59,12 +54,12 @@ export const mintNFT = async (req, res, next) => {
     const minPriceInWei = ethers.utils.parseEther(minPrice);
     const price = minPriceInWei.toString();
     const signedVoucher = await NFTVoucher.findOne({ tokenId });
-    //console.log(`Signed voucher : , ${signedVoucher}`);
+
     if (
       !(
         tokenId == signedVoucher.tokenId &&
-        uri == signedVoucher.uri &&
         price == signedVoucher.minPrice &&
+        uri == signedVoucher.uri &&
         buyer == signedVoucher.buyer
       )
     ) {
@@ -73,10 +68,13 @@ export const mintNFT = async (req, res, next) => {
         message: "Unauthorised voucher",
       });
     }
+    const _tokenId = signedVoucher.tokenId;
+    const _price = signedVoucher.minPrice;
+    const _uri = signedVoucher.uri;
+    const _buyer = signedVoucher.buyer;
+    const _signature = signedVoucher.signature;
 
-    //const signer = new ethers.Wallet(buyerPrivateKey, provider);
-    const signature = signedVoucher.signature;
-    const voucher = { tokenId, price, uri, buyer, signature };
+    const voucher = [_tokenId, _price, _uri, _buyer, _signature];
     console.log(voucher);
     const txn = await initMint(voucher, buyer, buyerPrivateKey);
 

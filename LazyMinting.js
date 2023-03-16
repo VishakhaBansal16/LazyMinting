@@ -8,14 +8,14 @@ const SIGNING_DOMAIN_VERSION = "1";
 const contractAddress = "0x5cE8Bed7f508E3D36D312bf51221c6E185994C23"; //deployed contract address
 const signer = new ethers.Wallet(process.env.NFT_CREATOR_PRIVATE_KEY);
 
-async function createVoucher(tokenId, uri, minPrice, buyer) {
-  const voucher = { tokenId, uri, minPrice, buyer };
+async function createVoucher(tokenId, minPrice, uri, buyer) {
+  const voucher = { tokenId, minPrice, uri, buyer };
   const domain = await _signingDomain();
   const types = {
     LazyNFTVoucher: [
       { name: "tokenId", type: "uint256" },
-      { name: "uri", type: "string" },
       { name: "minPrice", type: "uint256" },
+      { name: "uri", type: "string" },
       { name: "buyer", type: "address" },
     ],
   };
@@ -41,11 +41,10 @@ async function _signingDomain() {
   return _domain;
 }
 
-export const init = async (tokenId, uri, minPrice, buyer) => {
-  const voucher = await createVoucher(tokenId, uri, minPrice, buyer);
+export const init = async (tokenId, minPrice, uri, buyer) => {
+  const voucher = await createVoucher(tokenId, minPrice, uri, buyer);
   console.log(
-    `[${voucher.tokenId}, "${voucher.uri}", ${voucher.minPrice}, "${voucher.buyer}", "${voucher.signature}"]`
+    `[${voucher.tokenId}, ${voucher.minPrice}, "${voucher.uri}", "${voucher.buyer}", "${voucher.signature}"]`
   );
   return voucher;
 };
-export { createVoucher };

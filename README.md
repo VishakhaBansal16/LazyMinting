@@ -10,25 +10,23 @@
 
 ## Task Description
 
-List your ERC721A NFT collection on Opensea with Pinata.
+Implement Lazy Minting using ERC721.
 
 ## Tasks Included
 
-- Create a NFT smart contract using ERC721A
-- Create REST API for minting new NFTs
-- Prepare JSON URIs for each token
-- Set token URI for every token at the time of minting
-- Use Pinata IPFS cloud for uploading these URIs
-- NFTs must be visible on opensea marketplace
+- Create a Lazy Minting NFT smart contract using ERC721, ERC721URIStorage, EIP712.
+- Create REST APIs for creating voucher and for minting NFT.
+- Store the details of created voucher in the database.
+- Check whether NFT buyer is authorised to mint NFT by fetching created voucher from database.
+- If buyer is authorised then NFT must be minted.
 
 ## Technologies Included
 
 - Nodejs for backend
 - Solidity for smart contracts
 - Hardhat for deploying contract on testnet goerli
-- Pinata IPFS cloud to upload and manage files.
-- OpenSea marketplace to list NFTs
-- Postman for hitting minting API
+- MongoDB for storing data.
+- Postman for hitting APIs
 
 ## Install and Run
 
@@ -91,10 +89,11 @@ Run npx hardhat run scripts/deploy.js --network goerli to deploy contracts on ne
 npx hardhat run scripts/deploy.js --network goerli
 ```
 
-Run npx hardhat run scripts/verify.js --network goerli to verify the deployed contracts on netwrok goerli.
+Run npx hardhat verify --network goerli <deployed contract address> to verify the deployed contracts on netwrok goerli.
 
 ```
-npx hardhat run scripts/verify.js --network goerli
+npx hardhat verify --network goerli <deployed contract address>
+
 ```
 
 Run npx hardhat test for unit testing smart contract
@@ -103,7 +102,7 @@ Run npx hardhat test for unit testing smart contract
 npx hardhat test
 ```
 
-Smart contract deployed on goerli testnet: 0xFD00c86e8421873006149DAFcE1cbA7E87D09f80
+Smart contract deployed on goerli testnet: 0x5cE8Bed7f508E3D36D312bf51221c6E185994C23
 
 ## Testing
 
@@ -116,17 +115,9 @@ npx hardhat test
 Expecting Test result.
 
 ```
-✔ Should set the right name and symbol (799ms)
-    ✔ Should assign the total supply of NFTs to the minter (62ms)
-    ✔ Should reduce the total supply of NFTs after burning (299ms)
-    ✔ Should assign the total number of NFTs minted to the totalSupply (201ms)
-    ✔ Should return owner of a minted NFT (116ms)
-    ✔ Should remove the owner of a NFT after burning (158ms)
-    ✔ Should not allow non-owners to set baseURI (114ms)
-    ✔ Should return the baseURI (88ms)
 
 
-  8 passing (2s)
+
 ```
 
 ## A Typical Top Level Directory
