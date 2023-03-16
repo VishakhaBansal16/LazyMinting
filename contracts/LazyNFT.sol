@@ -24,7 +24,7 @@ contract LazyNFT is ERC721, ERC721URIStorage, EIP712 {
 
     function recover(LazyNFTVoucher calldata voucher) public view returns (address) {
         bytes32 digest = _hashTypedDataV4(keccak256(abi.encode(
-            keccak256("LazyNFTVoucher(uint256 tokenId,uint256 price,string uri,address buyer)"),
+            keccak256("LazyNFTVoucher(uint256 tokenId, uint256 price, string uri, address buyer)"),
             voucher.tokenId,
             voucher.price,
             keccak256(bytes(voucher.uri)),
