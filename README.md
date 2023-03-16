@@ -102,7 +102,7 @@ Run npx hardhat test for unit testing smart contract
 npx hardhat test
 ```
 
-Smart contract deployed on goerli testnet: 0x5cE8Bed7f508E3D36D312bf51221c6E185994C23
+Smart contract deployed on goerli testnet: 0xaD4B7E40805a4f20fadA11dBEfaC66cB82486d0e
 
 ## Testing
 

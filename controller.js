@@ -1,4 +1,4 @@
-import { init } from "./LazyMinting.js";
+import { init } from "./mint.js";
 import { NFTVoucher } from "./model/NFTVoucher.js";
 import { ethers } from "ethers";
 import { initMint } from "./script.js";
@@ -21,7 +21,7 @@ export const createNFTVoucher = async (req, res, next) => {
       throw createError(404, "Not Found");
     }
     const price = new Decimal128(minPriceInWei.toString());
-    //const price = new Decimal128(minPriceInWei);
+
     const nftVoucher = await NFTVoucher.create({
       tokenId,
       minPrice: price,

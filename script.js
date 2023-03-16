@@ -1,4 +1,5 @@
 import Web3 from "web3";
+import ethers from "ethers";
 import { ABI } from "./ABI.js";
 
 const infuraUrl =
@@ -9,13 +10,17 @@ export const initMint = async (voucher, address, privateKey) => {
   const web3 = new Web3(infuraUrl);
   const myContract = new web3.eth.Contract(
     ABI,
-    "0x5cE8Bed7f508E3D36D312bf51221c6E185994C23"
+    "0xaD4B7E40805a4f20fadA11dBEfaC66cB82486d0e"
   );
+  const amountToSend = 0.001;
+  const value = web3.utils.toWei(amountToSend.toString(), "ether");
+  console.log(value);
   const tx = myContract.methods.safeMint(voucher);
   const gas = await tx.estimateGas({ from: address });
   const gasPrice = await web3.eth.getGasPrice();
   const data = tx.encodeABI();
   const nonce = await web3.eth.getTransactionCount(address);
+
   const signedTx = await web3.eth.accounts.signTransaction(
     {
       to: myContract.options.address,
@@ -23,6 +28,7 @@ export const initMint = async (voucher, address, privateKey) => {
       gas,
       gasPrice,
       nonce,
+      value,
     },
     privateKey
   );
