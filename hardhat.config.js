@@ -8,7 +8,7 @@ module.exports = {
     hardhat: {},
     goerli: {
       url: process.env.INFURA_API_URL,
-      accounts: [process.env.NFT_CREATOR_PRIVATE_KEY],
+      accounts: [process.env.NFT_BUYER_PRIVATE_KEY],
     },
   },
 

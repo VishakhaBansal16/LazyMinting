@@ -2,7 +2,7 @@ const { expect } = require("chai");
 const hardhat = require("hardhat");
 const { ethers } = hardhat;
 const { loadFixture } = require("@nomicfoundation/hardhat-network-helpers");
-const { lazy } = require("./LazyMinting.js");
+const { init } = require("./LazyMinting.js");
 async function deployTokenFixture() {
   const [minter, redeemer] = await ethers.getSigners();
 
