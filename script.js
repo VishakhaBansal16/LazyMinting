@@ -12,15 +12,13 @@ export const initMint = async (voucher, address, privateKey) => {
     ABI,
     "0xaD4B7E40805a4f20fadA11dBEfaC66cB82486d0e"
   );
-  const amountToSend = 0.001;
-  const value = web3.utils.toWei(amountToSend.toString(), "ether");
-  console.log(value);
+
   const tx = myContract.methods.safeMint(voucher);
   const gas = await tx.estimateGas({ from: address });
   const gasPrice = await web3.eth.getGasPrice();
   const data = tx.encodeABI();
   const nonce = await web3.eth.getTransactionCount(address);
-
+  const value = web3.utils.toWei("0.001", "ether");
   const signedTx = await web3.eth.accounts.signTransaction(
     {
       to: myContract.options.address,
