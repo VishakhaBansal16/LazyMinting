@@ -116,8 +116,37 @@ Expecting Test result.
 
 ```
 
+ LazyNFT
+    ✔ Should deploy (4198ms)
+    ✔ Should return minter address from recover function (259ms)
+    ✔ Should redeem/mint NFT from an authorised voucher (218ms)
+    ✔ Should mint NFT only if msg.value >= voucher.price (194ms)
+    ✔ Should mint NFT only if msg.value < voucher.price (261ms)
+    ✔ Should fail to redeem NFT voucher that's signed by an unauthorized account (216ms)
+    ✔ Should fail to redeem an NFT that is already claimed (254ms)
 
+
+  7 passing (6s)
 
 ```
 
 ## A Typical Top Level Directory
+
+```
+LazyMinting
+├─ .gitignore
+├─ ABI.js
+├─ controller.js
+├─ db
+│  └─ database.js
+├─ index.js
+├─ mint.js
+├─ model
+│  └─ NFTVoucher.js
+├─ package-lock.json
+├─ package.json
+├─ README.md
+├─ routes.js
+└─ script.js
+
+```

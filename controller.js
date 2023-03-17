@@ -77,10 +77,8 @@ export const mintNFT = async (req, res, next) => {
     const _signature = signedVoucher.signature;
 
     const voucher = [_tokenId, _price, _uri, _buyer, _signature];
-    console.log(voucher);
-    const txn = await initMint(voucher, buyer, buyerPrivateKey);
+    const txn = await initMint(voucher, buyerPrivateKey);
 
-    console.log(`Txn is :${txn}`);
     res.status(201).json({
       status: "success",
       txn,

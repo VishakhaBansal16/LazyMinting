@@ -11,7 +11,7 @@ const domain = {
   verifyingContract: contractAddress,
   chainId,
 };
-
+console.log(signer);
 async function createVoucher(tokenId, price, uri, buyer) {
   const voucher = { tokenId, price, uri, buyer };
   const types = {
@@ -31,9 +31,6 @@ async function createVoucher(tokenId, price, uri, buyer) {
 }
 
 export const init = async (tokenId, minPrice, uri, buyer) => {
-  const voucher = await createVoucher(tokenId, minPrice, uri, buyer); // the address is the address which receives the NFT
-  console.log(
-    `[${voucher.tokenId}, ${voucher.price}, "${voucher.uri}", "${voucher.buyer}", "${voucher.signature}"]`
-  );
+  const voucher = await createVoucher(tokenId, minPrice, uri, buyer);
   return voucher;
 };
